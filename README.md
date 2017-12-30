@@ -9,6 +9,12 @@
 ```powershell
 # 安装iis承载核心
 Add-WindowsFeature web-server
+# 允许远程执行shell脚本
+Enable-PSRemoting -force
+# 配置远程管理
+winrm quickconfig
+# 配置允许所有host访问(可能有安全隐患,建议统一配置到跳板机上)
+winrm s winrm/config/client '@{TrustedHosts="*"}'
 # 导入iis相关命令及iis虚拟驱动器
 Import-Module WebAdministration
 # 我想大家应该不需要Default Web Site
