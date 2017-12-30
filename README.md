@@ -47,6 +47,12 @@ New-WebBinding -Name xxxxxx -HostHeader yyy.com
 cd IIS:
 ```
 
+```powershell
+# 以yyy的身份远程登录xxx的ps管理
+Enter-PSSession xxx -Credential yyy
+```
+
+
 ## 数据库承载机通用脚本
 
 ### 安装sql express**收费版本sqlserver安装时需要额外键入license信息,这里不涉及,不处理**
