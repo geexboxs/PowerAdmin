@@ -9,6 +9,10 @@
 ```powershell
 # 安装iis承载核心
 Add-WindowsFeature web-server
+# 导入iis相关命令及iis虚拟驱动器
+Import-Module WebAdministration
+# 我想大家应该不需要Default Web Site
+Remove-Website -Name "Default Web Site"
 # 允许网络访问并安装choco
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString
 ('https://chocolatey.org/install.ps1'))
@@ -18,13 +22,21 @@ choco feature enable -n allowGlobalConfirmation
 choco install dotnetcore-windowshosting
 # choco安装webdeploy
 choco install webdeploy
+
+# 以下部分脚本可复用
+
+# 导入iis相关命令及iis虚拟驱动器
+Import-Module WebAdministration
+# 新建web站点"xxxxxx",虚拟路径为"yyyyyy",使用前需确保路径存在: mkdir yyyyyy
+New-Website -Name xxxxx -PhysicalPath yyyyyy
+# 新建对"xxxxxx"站点的绑定,绑定域名为"yyy.com",可通过[-Port <UInt32> ]进一步指定端口号
+New-WebBinding -Name xxxxxx -HostHeader yyy.com
+# 之后就可以直接用web deploy进行发布了
 ```
 
 ### 短期运维脚本
 
 ```powershell
-# 导入iis相关命令及iis虚拟驱动器
-Import-Module WebAdministration
 # 跳转iis驱动器以进行运维
 cd IIS:
 ```
