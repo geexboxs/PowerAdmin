@@ -7,8 +7,19 @@
 ### 初始化脚本
 
 ```powershell
-# 安装iis承载核心
+# 安装iis
 Add-WindowsFeature web-server
+# 安装iis承载核心
+Install-WindowsFeature web-whc
+# 安装iis .net45支持
+Install-WindowsFeature Web-Asp-Net45
+# 安装iis的web sokcet支持
+Install-WindowsFeature Web-websockets
+# 安装web管理服务,配置允许远程访问并自动启动服务
+Add-WindowsFeature Web-Mgmt-Service
+Set-Service wmsvc -startuptype "auto"
+Set-ItemProperty -Path  HKLM:\SOFTWARE\Microsoft\WebManagement\Server -Name EnableRemoteManagement  -Value 1
+Start-Service wmsvc
 # 允许远程执行shell脚本
 Enable-PSRemoting -force
 # 配置远程管理
@@ -33,8 +44,10 @@ choco install webdeploy
 
 # 导入iis相关命令及iis虚拟驱动器
 Import-Module WebAdministration
-# 新建web站点"xxxxxx",虚拟路径为"yyyyyy",使用前需确保路径存在: mkdir yyyyyy
+# 新建web站点"xxxxxx",虚拟路径为"yyyyyy",删除默认配置的绑定
+mkdir yyyyyy
 New-Website -Name xxxxx -PhysicalPath yyyyyy
+Remove-WebBinding -HostHeader ""
 # 新建对"xxxxxx"站点的绑定,绑定域名为"yyy.com",可通过[-Port <UInt32> ]进一步指定端口号
 New-WebBinding -Name xxxxxx -HostHeader yyy.com
 # 之后就可以直接用web deploy进行发布了
