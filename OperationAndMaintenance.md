@@ -60,9 +60,11 @@ Enter-PSSession xxx -Credential yyy
 ```
 
 
-## 数据库承载机通用脚本
+# 可选初始化功能
 
-### 安装sql express**收费版本sqlserver安装时需要额外键入license信息,这里不涉及,不处理**
+## 安装sql express
+
+**收费版本sqlserver安装时需要额外键入license信息,这里不涉及,不处理**
 ```powershell
 # 安装包下载地址
 $InstallerUrl = 'https://download.microsoft.com/download/6/4/A/64A05A0F-AB28-4583-BD7F-139D0495E473/SQLEXPR_x64_CHS.exe'
@@ -73,3 +75,14 @@ Invoke-WebRequest -Uri $InstallerUrl -OutFile $Destination -UseBasicParsing
 # 执行安装 /q:静默 /action=Install:操作为安装 /FEATURES=SQLEngine:安装数据库引擎 /INSTANCENAME=MSSQLSERVER:数据库实例名称为'MSSQLSERVER' /TCPENABLED=1:允许tcp远程连接 /IACCEPTSQLSERVERLICENSETERMS:同意安装前须知 /SECURITYMODE=SQL:安全认证模式为'sql用户认证' /SAPWD=xxxxxx:sa用户密码为'xxxxxx'
 &$Destination /q /ACTION=Install /FEATURES=SQLEngine /INSTANCENAME=MSSQLSERVER /TCPENABLED=1 /IACCEPTSQLSERVERLICENSETERMS  /SECURITYMODE=SQL /SAPWD=xxxxxx
 ```
+
+## 安装linux子系统
+
+```powershell
+	Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+	Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1604 -OutFile ~/Ubuntu.zip -UseBasicParsing
+	Expand-Archive ~/Ubuntu.zip ~/Ubuntu
+	cd C:\Distros\Ubuntu
+	.\ubuntu.exe
+```
+
