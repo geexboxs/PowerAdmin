@@ -44,7 +44,7 @@ New-Website -Name xxxxx -PhysicalPath yyyyyy
 Remove-WebBinding -HostHeader ""
 # 新建对"xxxxxx"站点的绑定,绑定域名为"yyy.com",可通过[-Port <UInt32> ]进一步指定端口号
 New-WebBinding -Name xxxxxx -HostHeader yyy.com
-# 之后就可以直接用web deploy进行发布了
+# 至此服务器基本部署完毕, 之后就可以直接用web deploy进行发布了
 ```
 
 ### 短期运维脚本
@@ -79,10 +79,10 @@ Invoke-WebRequest -Uri $InstallerUrl -OutFile $Destination -UseBasicParsing
 ## 安装linux子系统
 
 ```powershell
-	Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-	Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1604 -OutFile ~/Ubuntu.zip -UseBasicParsing
-	Expand-Archive ~/Ubuntu.zip ~/Ubuntu
-	cd C:\Distros\Ubuntu
-	.\ubuntu.exe
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1604 -OutFile ~/Ubuntu.zip -UseBasicParsing
+Expand-Archive ~/Ubuntu.zip ~/Ubuntu
+cd C:\Distros\Ubuntu
+.\ubuntu.exe
 ```
 
