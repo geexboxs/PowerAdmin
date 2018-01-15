@@ -33,6 +33,8 @@ choco feature enable -n allowGlobalConfirmation
 choco install dotnetcore-windowshosting
 # choco安装webdeploy
 choco install webdeploy
+# choco安装shadowsocks以备不时之需
+choco install shadowsocks
 
 # 以下部分脚本可复用
 
