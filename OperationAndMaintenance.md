@@ -5,6 +5,8 @@
 Add-WindowsFeature web-server
 # 安装iis承载核心
 Install-WindowsFeature web-whc
+# 安装iis管理控制台
+Install-WindowsFeature Web-Mgmt-Tools
 # 安装iis .net45支持
 Install-WindowsFeature Web-Asp-Net45
 # 安装iis的web sokcet支持
