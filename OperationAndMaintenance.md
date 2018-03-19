@@ -36,7 +36,14 @@ choco install dotnetcore-windowshosting
 choco install webdeploy
 # choco安装shadowsocks以备不时之需
 choco install shadowsocks
+# 重启服务器,血泪教训
+Restart-Computer
+# over
+```
 
+### 短期运维脚本
+
+```powershell
 # 以下部分脚本可复用
 
 # 导入iis相关命令及iis虚拟驱动器
@@ -49,8 +56,6 @@ Remove-WebBinding -HostHeader ""
 New-WebBinding -Name xxxxxx -HostHeader yyy.com
 # 至此服务器基本部署完毕, 之后就可以直接用web deploy进行发布了
 ```
-
-### 短期运维脚本
 
 ```powershell
 # 跳转iis驱动器以进行运维
