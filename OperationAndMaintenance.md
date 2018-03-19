@@ -25,8 +25,7 @@ Import-Module WebAdministration
 # 我想大家应该不需要Default Web Site
 Remove-Website -Name "Default Web Site"
 # 允许网络访问并安装choco
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString
-('https://chocolatey.org/install.ps1'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 # choco静默安装
 choco feature enable -n allowGlobalConfirmation
 # choco安装.net core运行时
