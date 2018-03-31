@@ -70,6 +70,20 @@ Enter-PSSession xxx -Credential yyy
 
 # 可选初始化功能
 
+## 搭建shadowsocks server
+
+```powershell
+# 安装git, openssl的dll托管在github上, 需要git安装
+choco install git
+# 安装python
+choco install python
+# 切换至cmd(刷新系统环境变量后安装shadowsocks)
+cmd
+pip install shadowsocks
+exit
+# git clone 
+```
+
 ## 安装sql express
 
 **收费版本sqlserver安装时需要额外键入license信息,这里不涉及,不处理**
