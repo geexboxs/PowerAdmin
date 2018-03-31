@@ -1,3 +1,5 @@
+# 注意:以下的部分脚本会有参数,所有参数会以**{参数}**标注,请勿直接复制粘贴
+
 ### 虚拟机初始化脚本
 
 ```powershell
@@ -36,6 +38,12 @@ choco install dotnetcore-windowshosting
 choco install webdeploy
 # choco安装shadowsocks以备不时之需
 choco install shadowsocks
+# choco安装listary,搜文件还是很有用的
+choco install listary
+# choco安装vscode,notepad的编码问题可以搞死你
+choco install visualstudiocode
+# choco安装dependencywalker,服务器出现兼容性问题的时候可以用来检查dll
+choco install dependencywalker
 # 重启服务器,血泪教训
 Restart-Computer
 # over
@@ -49,11 +57,11 @@ Restart-Computer
 # 导入iis相关命令及iis虚拟驱动器
 Import-Module WebAdministration
 # 新建web站点"xxxxxx",虚拟路径为"yyyyyy",删除默认配置的绑定
-mkdir yyyyyy
-New-Website -Name xxxxx -PhysicalPath yyyyyy
+mkdir **{yyyyyy}**
+New-Website -Name **{xxxxx}** -PhysicalPath **{yyyyyy}**
 Remove-WebBinding -HostHeader ""
 # 新建对"xxxxxx"站点的绑定,绑定域名为"yyy.com",可通过[-Port <UInt32> ]进一步指定端口号
-New-WebBinding -Name xxxxxx -HostHeader yyy.com
+New-WebBinding -Name **{xxxxxx}** -HostHeader **{yyy.com}**
 # 至此服务器基本部署完毕, 之后就可以直接用web deploy进行发布了
 ```
 
@@ -64,7 +72,7 @@ cd IIS:
 
 ```powershell
 # 以yyy的身份远程登录xxx的ps管理
-Enter-PSSession xxx -Credential yyy
+Enter-PSSession **{xxx}** -Credential **{yyy}**
 ```
 
 
@@ -81,7 +89,20 @@ choco install python
 cmd
 pip install shadowsocks
 exit
-# git clone 
+# clone openssl必须的dll
+git clone https://gist.github.com/snys98/2a671f5ed9cac078cec1bea84c37733e
+cd ./2a671f5ed9cac078cec1bea84c37733e
+# 注册openssl必须的dll并移除临时目录
+copy libeay32.dll %WINDIR%\System32\libeay32.dll
+regsvr32.exe /s %WINDIR%\System32\libeay32.dll
+cd ..
+del ./2a671f5ed9cac078cec1bea84c37733e
+mkdir C:\ShadowsocksServer\
+cd C:\ShadowsocksServer\
+# 生成配置文件
+'{"server": "0.0.0.0","server_port": **{your_port}**,"password": "**{your_password}**","timeout": 1000,"method": "aes-256-cfb","dast_open": false}'>config.json
+# 添加启动项
+"ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
 ```
 
 ## 安装sql express
@@ -95,7 +116,7 @@ $Destination = "$env:temp\SQLEXPR_x64_CHS.exe"
 # 执行下载
 Invoke-WebRequest -Uri $InstallerUrl -OutFile $Destination -UseBasicParsing
 # 执行安装 /q:静默 /action=Install:操作为安装 /FEATURES=SQLEngine:安装数据库引擎 /INSTANCENAME=MSSQLSERVER:数据库实例名称为'MSSQLSERVER' /TCPENABLED=1:允许tcp远程连接 /IACCEPTSQLSERVERLICENSETERMS:同意安装前须知 /SECURITYMODE=SQL:安全认证模式为'sql用户认证' /SAPWD=xxxxxx:sa用户密码为'xxxxxx'
-&$Destination /q /ACTION=Install /FEATURES=SQLEngine /INSTANCENAME=MSSQLSERVER /TCPENABLED=1 /IACCEPTSQLSERVERLICENSETERMS  /SECURITYMODE=SQL /SAPWD=xxxxxx
+&$Destination /q /ACTION=Install /FEATURES=SQLEngine /INSTANCENAME=MSSQLSERVER /TCPENABLED=1 /IACCEPTSQLSERVERLICENSETERMS  /SECURITYMODE=SQL /SAPWD=**{xxxxxx}**
 ```
 
 ## 安装linux子系统
