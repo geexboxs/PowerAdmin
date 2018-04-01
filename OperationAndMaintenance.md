@@ -57,7 +57,7 @@ Restart-Computer
 # 导入iis相关命令及iis虚拟驱动器
 Import-Module WebAdministration
 # 新建web站点"xxxxxx",虚拟路径为"yyyyyy",删除默认配置的绑定
-mkdir **{yyyyyy}**
+mkdir **{yyyyyy}** -ErrorAction SilentlyContinue
 New-Website -Name **{xxxxx}** -PhysicalPath **{yyyyyy}**
 Remove-WebBinding -HostHeader ""
 # 新建对"xxxxxx"站点的绑定,绑定域名为"yyy.com",可通过[-Port <UInt32> ]进一步指定端口号
@@ -95,20 +95,14 @@ copy libeay32.dll $env:windir\System32\libeay32.dll
 regsvr32.exe /s $env:windir\System32\libeay32.dll
 cd ..
 del .\CloudFolder\ -Force -Recurse
-mkdir C:\ShadowsocksServer\
+mkdir C:\ShadowsocksServer\ -ErrorAction SilentlyContinue
 cd C:\ShadowsocksServer\
 
 # 生成配置文件,处理编码问题
-[System.IO.File]::WriteAllLines(".\config.json","'{"server": "0.0.0.0","server_port": **{your_port}**,"password": "**{your_password}**","timeout": 1000,"method": "aes-256-cfb","dast_open": false}'")
+'{"server": "0.0.0.0","server_port": 8888,"password": "**{your_password}**","timeout": 1000,"method": "aes-256-cfb","dast_open": false}'|Out-File "config.json" -Encoding ascii
 # 添加启动项
-try {
-    "ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
-}
-catch {
-    mkdir C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup
-    "ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
-    Write-Warning "Error: $_"
-}
+mkdir C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup -ErrorAction SilentlyContinue
+"ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
 # 本次启动
 start powershell -ArgumentList "ssserver -c C:\ShadowsocksServer\config.json"
 ```
