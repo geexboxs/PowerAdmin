@@ -3,6 +3,25 @@
 ### 虚拟机初始化脚本
 
 ```powershell
+# 载入自定义profile
+@"
+###########################################################
+#
+# custom profile
+#
+###########################################################
+Set-PSReadlineOption -EditMode Emacs
+Get-Module -ListAvailable | ? { $_.ModuleType -eq "Script" } | Import-Module
+
+# inline functions, aliases and variables
+function which($name) { Get-Command $name | Select-Object Definition }
+function rmrf($item) { Remove-Item $item -Recurse -Force }
+function mkfile($file) { "" | Out-File $file -Encoding ASCII }
+
+mkdir "$($env:UserProfile)\bin" -ErrorAction SilentlyContinue
+$bin = "$($env:UserProfile)\bin"
+"@>$PROFILE
+
 # 安装iis
 Add-WindowsFeature web-server
 # 安装iis承载核心
