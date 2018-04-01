@@ -101,7 +101,15 @@ cd C:\ShadowsocksServer\
 # 生成配置文件,处理编码问题
 [System.IO.File]::WriteAllLines(".\config.json","'{"server": "0.0.0.0","server_port": **{your_port}**,"password": "**{your_password}**","timeout": 1000,"method": "aes-256-cfb","dast_open": false}'")
 # 添加启动项
-"ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
+try {
+    "ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
+}
+catch {
+    mkdir C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup
+    "ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
+    Write-Warning "Error: $_"
+}
+# 本次启动
 start powershell -ArgumentList "ssserver -c C:\ShadowsocksServer\config.json"
 ```
 
