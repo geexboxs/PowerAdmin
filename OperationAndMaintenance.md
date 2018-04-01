@@ -85,24 +85,24 @@ Enter-PSSession **{xxx}** -Credential **{yyy}**
 choco install git
 # 安装python
 choco install python
-# 切换至cmd(刷新系统环境变量后安装shadowsocks)
-cmd
-pip install shadowsocks
-exit
+# 切换新的运行环境使用pips安装shadowsocks(刷新系统环境变量)
+start powershell -ArgumentList "pip install shadowsocks"
 # clone openssl必须的dll
-git clone https://gist.github.com/snys98/2a671f5ed9cac078cec1bea84c37733e
-cd ./2a671f5ed9cac078cec1bea84c37733e
+git clone https://github.com/snys98/CloudFolder.git
+cd .\CloudFolder\ 
 # 注册openssl必须的dll并移除临时目录
-copy libeay32.dll %WINDIR%\System32\libeay32.dll
-regsvr32.exe /s %WINDIR%\System32\libeay32.dll
+copy libeay32.dll $env:windir\System32\libeay32.dll
+regsvr32.exe /s $env:windir\System32\libeay32.dll
 cd ..
-del ./2a671f5ed9cac078cec1bea84c37733e
+del .\CloudFolder\ -Force -Recurse
 mkdir C:\ShadowsocksServer\
 cd C:\ShadowsocksServer\
-# 生成配置文件
-'{"server": "0.0.0.0","server_port": **{your_port}**,"password": "**{your_password}**","timeout": 1000,"method": "aes-256-cfb","dast_open": false}'>config.json
+
+# 生成配置文件,处理编码问题
+[System.IO.File]::WriteAllLines(".\config.json","'{"server": "0.0.0.0","server_port": **{your_port}**,"password": "**{your_password}**","timeout": 1000,"method": "aes-256-cfb","dast_open": false}'")
 # 添加启动项
 "ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
+start powershell -ArgumentList "ssserver -c C:\ShadowsocksServer\config.json"
 ```
 
 ## 安装sql express
