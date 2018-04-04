@@ -3,6 +3,7 @@
 ### 虚拟机初始化脚本
 
 ```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force;
 # 载入自定义profile
 @"
 ###########################################################
@@ -25,11 +26,7 @@ mkdir "`$env:UserProfile\bin" -ErrorAction SilentlyContinue
 # 安装iis
 Add-WindowsFeature web-server
 # 安装iis承载核心
-Install-WindowsFeature web-whc
-# 安装iis管理控制台
-Install-WindowsFeature Web-Mgmt-Tools
-# 安装iis .net45支持
-Install-WindowsFeature Web-Asp-Net45
+Install-WindowsFeature web-whc,web-common-http,web-mgmt-console,Web-Asp-Net45,Web-websockets
 # 安装iis的web sokcet支持
 Install-WindowsFeature Web-websockets
 # 安装web管理服务,配置允许远程访问并自动启动服务
@@ -48,9 +45,11 @@ Import-Module WebAdministration
 # 我想大家应该不需要Default Web Site
 Remove-Website -Name "Default Web Site"
 # 允许网络访问并安装choco
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 # choco静默安装
 choco feature enable -n allowGlobalConfirmation
+# 安装git, 很多东西托管在github上, 需要git安装
+choco install git
 # choco安装.net core运行时
 choco install dotnetcore-windowshosting
 # choco安装webdeploy
@@ -100,8 +99,6 @@ Enter-PSSession **{xxx}** -Credential **{yyy}**
 ## 搭建shadowsocks server
 
 ```powershell
-# 安装git, openssl的dll托管在github上, 需要git安装
-choco install git
 # 安装python
 choco install python
 # 切换新的运行环境使用pips安装shadowsocks(刷新系统环境变量)
