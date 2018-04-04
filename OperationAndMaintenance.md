@@ -3,7 +3,7 @@
 ### 虚拟机初始化脚本
 
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force;
+Set-ExecutionPolicy Bypass -Scope CurrentUser -Force;
 # 载入自定义profile
 @"
 ###########################################################
