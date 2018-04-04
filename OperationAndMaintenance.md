@@ -5,6 +5,9 @@
 ```powershell
 Set-ExecutionPolicy Bypass -Scope CurrentUser -Force;
 # 载入自定义profile
+# 创建profile目录
+mkdir $PROFILE
+del $PROFILE
 @"
 ###########################################################
 #
