@@ -14,8 +14,8 @@ del $PROFILE
 # custom profile
 #
 ###########################################################
+chcp 65001
 Set-PSReadlineOption -EditMode Emacs
-Get-Module -ListAvailable | ? { `$_.ModuleType -eq "Script" } | Import-Module
 
 # inline functions, aliases and variables
 function which(`$name) { Get-Command `$name | Select-Object Definition }
@@ -41,6 +41,7 @@ Start-Service wmsvc
 Enable-PSRemoting -force
 # 配置远程管理
 winrm quickconfig
+y
 # 配置允许所有host访问(可能有安全隐患,建议统一配置到跳板机上)
 winrm s winrm/config/client '@{TrustedHosts="*"}'
 # 导入iis相关命令及iis虚拟驱动器
