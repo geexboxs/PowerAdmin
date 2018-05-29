@@ -151,3 +151,11 @@ cd C:\Distros\Ubuntu
 .\ubuntu.exe
 ```
 
+## 安装ElasticSearch with Kibana(安装完成后需要手动在Service中启动服务)
+
+```powershell
+# 访问http://localhost:9200/?pretty以检测es运行状态
+choco install elasticsearch
+# 访问http://localhost:5601以检测kibana运行状态
+choco install kibana
+```
