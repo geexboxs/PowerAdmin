@@ -151,11 +151,18 @@ cd C:\Distros\Ubuntu
 .\ubuntu.exe
 ```
 
-## 安装ElasticSearch with Kibana(安装完成后需要手动在Service中启动服务)
+## 安装ElasticSearch with Kibana
 
 ```powershell
 # 访问http://localhost:9200/?pretty以检测es运行状态
 choco install elasticsearch
+# 启动并今后自动启动es服务
+Set-Service -Name "elasticsearch-service-x64" -Status Running -StartupType Automatic
 # 访问http://localhost:5601以检测kibana运行状态
 choco install kibana
+# kibana的包有点问题,需要手动安装一下服务,
+sc.exe delete kibana-service
+nssm install kibana-service C:\ProgramData\chocolatey\lib\kibana\tools\kibana-6.2.4-windows-x86_64\bin\kibana.bat
+nssm start kibana-service
+nssm set kibana-service start SERVICE_AUTO_START
 ```
