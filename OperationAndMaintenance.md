@@ -154,7 +154,7 @@ cd C:\Distros\Ubuntu
 ## 安装ElasticSearch with Kibana
 
 ```powershell
-# 访问http://localhost:9200/?pretty以检测es运行状态
+# 安装es,完成后可通过访问http://localhost:9200/?pretty以检测es运行状态
 choco install elasticsearch
 # 启动并今后自动启动es服务
 Set-Service -Name "elasticsearch-service-x64" -Status Running -StartupType Automatic
@@ -165,4 +165,11 @@ sc.exe delete kibana-service
 nssm install kibana-service C:\ProgramData\chocolatey\lib\kibana\tools\kibana-6.2.4-windows-x86_64\bin\kibana.bat
 nssm start kibana-service
 nssm set kibana-service start SERVICE_AUTO_START
+```
+
+## 安装Consul
+
+```powershell
+# 安装consul,安装后的consul默认以client模式运行,如果是需要以server模式运行,需要编辑consul的nssm服务
+choco install consul
 ```
