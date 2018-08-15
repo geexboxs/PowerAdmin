@@ -132,9 +132,9 @@ start powershell -ArgumentList "ssserver -c C:\ShadowsocksServer\config.json"
 **收费版本sqlserver安装时需要额外键入license信息,这里不涉及,不处理**
 ```powershell
 # 安装包下载地址
-$InstallerUrl = 'https://download.microsoft.com/download/6/4/A/64A05A0F-AB28-4583-BD7F-139D0495E473/SQLEXPR_x64_CHS.exe'
+$InstallerUrl = 'https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLEXPR_x64_ENU.exe'
 # 下载临时目录
-$Destination = "$env:temp\SQLEXPR_x64_CHS.exe"
+$Destination = "$env:temp\SQLEXPR_x64_ENU.exe"
 # 执行下载
 Invoke-WebRequest -Uri $InstallerUrl -OutFile $Destination -UseBasicParsing
 # 执行安装 /q:静默 /action=Install:操作为安装 /FEATURES=SQLEngine:安装数据库引擎 /INSTANCENAME=MSSQLSERVER:数据库实例名称为'MSSQLSERVER' /TCPENABLED=1:允许tcp远程连接 /IACCEPTSQLSERVERLICENSETERMS:同意安装前须知 /SECURITYMODE=SQL:安全认证模式为'sql用户认证' /SAPWD=xxxxxx:sa用户密码为'xxxxxx'
