@@ -1,9 +1,8 @@
 # 这是一些个人配置命令行界面的初始化配置
 
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco feature enable -n allowGlobalConfirmation
-choco install ConEmu
 Install-Module posh-git
 Install-Module oh-my-posh
 Install-Module -Name PSReadLine -Force -SkipPublisherCheck
@@ -17,11 +16,13 @@ function rmrf(`$item) { Remove-Item `$item -Recurse -Force }
 function mkfile(`$file) { "" | Out-File `$file -Encoding ASCII }
 Import-Module posh-git
 Import-Module oh-my-posh
-Set-Theme Paradox
+Set-Theme Agnoster
 "@ > $PROFILE
+chcp 65001
+Set-PSReadlineOption -EditMode Emacs
 Import-Module posh-git
 Import-Module oh-my-posh
-Set-Theme paradox
+Set-Theme Agnoster
 git clone https://github.com/powerline/fonts.git
 cd .\fonts\
 .\install.ps1
