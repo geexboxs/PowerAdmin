@@ -3,6 +3,7 @@
 ```powershell
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco feature enable -n allowGlobalConfirmation
+choco install git
 Install-Module posh-git
 Install-Module oh-my-posh
 Install-Module -Name PSReadLine -Force -SkipPublisherCheck
