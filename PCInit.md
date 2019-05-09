@@ -100,12 +100,18 @@ function rmrf(`$item) { Remove-Item `$item -Recurse -Force }
 function mkfile(`$file) { "" | Out-File `$file -Encoding ASCII }
 Import-Module posh-git
 Import-Module oh-my-posh
+Import-Module Get-ChildItemColor
+Set-Alias l Get-ChildItemColor -option AllScope
+Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 Set-Theme Paradox
 "@ > $PROFILE
 chcp 65001
 Set-PSReadlineOption -EditMode Emacs
 Import-Module posh-git
 Import-Module oh-my-posh
+Import-Module Get-ChildItemColor
+Set-Alias l Get-ChildItemColor -option AllScope
+Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 Set-Theme Paradox
 git clone https://github.com/powerline/fonts.git
 cd .\fonts\
