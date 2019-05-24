@@ -173,3 +173,15 @@ nssm set kibana-service start SERVICE_AUTO_START
 # 安装consul,安装后的consul默认以client模式运行,如果是需要以server模式运行,需要编辑consul的nssm服务
 choco install consul
 ```
+
+## 配置git alias
+```powershell
+git config --global alias.cm commit
+git config --global alias.co checkout
+git config --global alias.ac '!git add -A && git commit'
+git config --global alias.st 'status -sb'
+git config --global alias.tags 'tag -l'
+git config --global alias.branches 'branch -a'
+git config --global alias.remotes 'remote -v'
+git config --global alias.logcolor "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
+```
