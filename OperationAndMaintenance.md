@@ -102,6 +102,7 @@ Enter-PSSession **{xxx}** -Credential **{yyy}**
 
 ## 搭建shadowsocks server
 
+### windows
 ```powershell
 # 安装python
 choco install python
@@ -125,6 +126,19 @@ mkdir C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup -ErrorAction Silen
 "ssserver -c C:\ShadowsocksServer\config.json">C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\shadowsocks.ps1
 # 本次启动
 start powershell -ArgumentList "ssserver -c C:\ShadowsocksServer\config.json"
+```
+
+### linux
+```shell
+apt upgrade
+# 安装python
+apt install python-pip -y
+# 没有setuptools会导致ss安装失败
+pip install setuptools
+# 安装最新版本的ss, 旧版和1.02以后版本的openssl存在兼容性问题
+pip install -U git+https://github.com/shadowsocks/shadowsocks.git@master
+# 启动ssserver到80端口
+ssserver -p 80 -k **{your_password}** -m aes-256-cfb --user root -d start
 ```
 
 ## 安装sql express
