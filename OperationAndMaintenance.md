@@ -137,8 +137,27 @@ apt install python-pip -y
 pip install setuptools
 # 安装最新版本的ss, 旧版和1.02以后版本的openssl存在兼容性问题
 pip install -U git+https://github.com/shadowsocks/shadowsocks.git@master
-# 启动ssserver到80端口
-ssserver -p 80 -k **{your_password}** -m aes-256-cfb --user root -d start
+# 启动ssserver到3389端口
+nohup ssserver -p 3389 -k **{password}** -m aes-256-cfb --user nobody -d start &
+# 安装flask, 挂载一个用于检测ip是否可以正常访问的测试站点(同时也是防止cc防火墙检测)
+pip install flask
+cat>~/hello.py<<EOF
+from flask import Flask, redirect
+app = Flask(__name__)
+@app.route('/')
+def index():
+    return redirect("http://www.baidu.com")
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=80)
+EOF
+# 自启动ssserver和测试站点
+cat>/etc/profile.d/startup.sh<<EOF
+nohup ssserver -p 3389 -k **{password}** -m aes-256-cfb --user nobody -d start &
+nohup python ~/hello.py &
+EOF
+# 运行测试站点
+nohup python ~/hello.py &
+
 ```
 
 ## 安装sql express
