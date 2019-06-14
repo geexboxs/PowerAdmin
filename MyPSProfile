@@ -1,0 +1,25 @@
+chcp 65001
+Set-PSReadlineOption -EditMode Emacs
+$bin = ([System.String]::Concat($env:USERPROFILE,"\bin"))
+$binsub = Get-ChildItem $bin | ? { $_.Mode -match "d-----" } | % { $_.FullName}
+$env:path = [System.String]::Join(';', $env:Path, $env:USERPROFILE, $bin, [System.String]::Join(';',$binsub))
+$env:LC_ALL="C.UTF-8"
+function which($name) { Get-Command $name | Select-Object Definition }
+function rmrf($item) { Remove-Item $item -Recurse -Force }
+function mkfile($file) { "" | Out-File $file -Encoding ASCII }
+function jsonize($obj){ [Newtonsoft.Json.JsonConvert]::SerializeObject($obj) }
+function link ($source,$target) {
+    cmd /c mklink /d $target $source
+}
+Import-Module posh-git
+Import-Module oh-my-posh
+Set-Theme Paradox
+Import-Module Get-ChildItemColor
+Set-Alias l Get-ChildItemColor -option AllScope
+Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
+
+# Chocolatey profile
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+    Import-Module "$ChocolateyProfile"
+}
