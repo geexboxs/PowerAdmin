@@ -8,6 +8,7 @@ Install-Module posh-git
 Install-Module oh-my-posh
 Install-Module -Name PSReadLine -Force -SkipPublisherCheck
 Install-Module Get-ChildItemColor
+Install-Module WindowsConsoleFonts
 if (!(Test-Path -Path $PROFILE )) { New-Item -Type File -Path $PROFILE -Force }
 @"
 #requires -Version 2 -Modules posh-git
@@ -101,6 +102,7 @@ function mkfile(`$file) { "" | Out-File `$file -Encoding ASCII }
 Import-Module posh-git
 Import-Module oh-my-posh
 Import-Module Get-ChildItemColor
+Import-Module WindowsConsoleFonts
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 Set-Theme Paradox
@@ -110,6 +112,7 @@ Set-PSReadlineOption -EditMode Emacs
 Import-Module posh-git
 Import-Module oh-my-posh
 Import-Module Get-ChildItemColor
+Import-Module WindowsConsoleFonts
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 Set-Theme Paradox
