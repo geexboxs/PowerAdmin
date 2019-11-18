@@ -7,7 +7,7 @@ choco install git
 Install-Module posh-git
 Install-Module oh-my-posh
 Install-Module -Name PSReadLine -Force -SkipPublisherCheck
-Install-Module Get-ChildItemColor
+Install-Module Get-ChildItemColor -AllowClobber
 Install-Module WindowsConsoleFonts
 if (!(Test-Path -Path $PROFILE )) { New-Item -Type File -Path $PROFILE -Force }
 @"
@@ -101,7 +101,7 @@ function rmrf(`$item) { Remove-Item `$item -Recurse -Force }
 function mkfile(`$file) { "" | Out-File `$file -Encoding ASCII }
 Import-Module posh-git
 Import-Module oh-my-posh
-Import-Module Get-ChildItemColor
+Import-Module Get-ChildItemColor -AllowClobber
 Import-Module WindowsConsoleFonts
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
