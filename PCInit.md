@@ -101,7 +101,7 @@ function rmrf(`$item) { Remove-Item `$item -Recurse -Force }
 function mkfile(`$file) { "" | Out-File `$file -Encoding ASCII }
 Import-Module posh-git
 Import-Module oh-my-posh
-Import-Module Get-ChildItemColor -AllowClobber
+Import-Module Get-ChildItemColor
 Import-Module WindowsConsoleFonts
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
