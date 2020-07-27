@@ -22,7 +22,7 @@ CREATE DATABASE **{name of db}**
 -- eg: 'C:\workspace\data\mydb_new.mdf'
 ON (FILENAME = '**{path to mdf file}'),   
 -- eg: 'C:\workspace\data\mydb_new_log.ldf'
-(FILENAME = 'C:\Users\lulus\workspace\data\AppsDB_new_log.ldf')   
+(FILENAME = '**{path to ldf file}')   
 FOR ATTACH;  
 ```
 
