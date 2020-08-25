@@ -187,17 +187,67 @@ cd ~/Ubuntu
 ## 安装ElasticSearch with Kibana
 
 ```powershell
+# 默认安装到~目录
+Set-Location ~
+choco install 7zip -y
+choco install nssm -y
+function Test-Administrator {
+    [OutputType([bool])]
+    param()
+    process {
+        [Security.Principal.WindowsPrincipal]$user = [Security.Principal.WindowsIdentity]::GetCurrent();
+        return $user.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator);
+    }
+}
+if (-not (Test-Administrator)) {
+    Write-Error "This script must be executed as Administrator."
+    break
+}
+  
+$ProgressPreference = 'SilentlyContinue'
+Write-Output "Downloading ElasicSearch"
+Invoke-WebRequest  -Uri https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.0-windows-x86_64.zip -OutFile Elasticsearch.zip
+Write-Output "Downloading Kibana"
+Invoke-WebRequest  -Uri https://artifacts.elastic.co/downloads/kibana/kibana-7.9.0-windows-x86_64.zip -OutFile Kibana.zip
+  
+Write-Output "#########################################################################"
+Write-Output "Downloads completed, decompressing"
+7z x Elasticsearch.zip -y -r -oElasticsearch
+7z x Kibana.zip -y -r -oKibana
+  
+Write-Output "Cleaning up a bit"
+Remove-Item .\Elasticsearch.zip
+Remove-Item .\Kibana.zip
+  
+$CurrentDir = Get-Location
+# Write-Output "Creating shortcuts on the Desktop.`n`n Happy Hunting!"
+  
+# $TargetFile = "$CurrentDir\Elasticsearch\elasticsearch-7.9.0\bin\elasticsearch.bat"
+# $ShortcutFile = "$env:USERPROFILE\Desktop\Elasticsearch.lnk"
+# $WScriptShell = New-Object -ComObject WScript.Shell
+# $Shortcut = $WScriptShell.CreateShortcut($ShortcutFile)
+# $Shortcut.TargetPath = $TargetFile
+# $Shortcut.Save()
+  
+# $TargetFile = "$CurrentDir\Kibana\kibana-7.9.0-windows-x86_64\bin\kibana.bat"
+# $ShortcutFile = "$env:USERPROFILE\Desktop\Kibana.lnk"
+# $WScriptShell = New-Object -ComObject WScript.Shell
+# $Shortcut = $WScriptShell.CreateShortcut($ShortcutFile)
+# $Shortcut.TargetPath = $TargetFile
+# $Shortcut.Save()
+# Write-Output "`nNote: If you move the directory you will break the shortcuts"
+  
+$CurrentDir = Get-Location
+Write-Output "######################################################`nDeployed`n######################################################"
+Write-Output "######################################################`nStarting Stack`n######################################################"
+  
+nssm install elasticsearch $CurrentDir\Elasticsearch\elasticsearch-7.9.0\bin\elasticsearch.bat
+nssm install kibana $CurrentDir\Kibana\kibana-7.9.0-windows-x86_64\bin\kibana.bat 
+nssm start kibana
+nssm set kibana start SERVICE_AUTO_START
+nssm start elasticsearch
+nssm set elasticsearch start SERVICE_AUTO_START
 # 安装es,完成后可通过访问http://localhost:9200/?pretty以检测es运行状态
-choco install elasticsearch
-# 启动并今后自动启动es服务
-Set-Service -Name "elasticsearch-service-x64" -Status Running -StartupType Automatic
-# 访问http://localhost:5601以检测kibana运行状态
-choco install kibana
-# kibana的包有点问题,需要手动安装一下服务,
-sc.exe delete kibana-service
-nssm install kibana-service C:\ProgramData\chocolatey\lib\kibana\tools\kibana-6.2.4-windows-x86_64\bin\kibana.bat
-nssm start kibana-service
-nssm set kibana-service start SERVICE_AUTO_START
 ```
 
 ## 安装Consul
