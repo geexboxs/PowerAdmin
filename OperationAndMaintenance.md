@@ -140,8 +140,6 @@ mkdir "`$env:UserProfile\bin" -ErrorAction SilentlyContinue
     choco install dependencywalker
     # choco安装nginx
     choco install nginx
-    $sqlpwd = "P@ssw0rd"
-    choco install sql-server-2019 --params="'/TCPENABLED=`"1`" /SECURITYMODE=`"SQL`" /SAPWD:`"$sqlpwd`"'"
     # 重启服务器,血泪教训
     Restart-Computer
     # over
@@ -240,18 +238,12 @@ nohup python ~/hello.py &
 
 ```
 
-## 安装sql express
+## 安装sql developer
 
 **收费版本sqlserver安装时需要额外键入license信息,这里不涉及,不处理**
 ```powershell
-# 安装包下载地址
-$InstallerUrl = 'https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLEXPR_x64_ENU.exe'
-# 下载临时目录
-$Destination = "$env:temp\SQLEXPR_x64_ENU.exe"
-# 执行下载
-Invoke-WebRequest -Uri $InstallerUrl -OutFile $Destination -UseBasicParsing
-# 执行安装 /q:静默 /action=Install:操作为安装 /FEATURES=SQLEngine:安装数据库引擎 /INSTANCENAME=MSSQLSERVER:数据库实例名称为'MSSQLSERVER' /TCPENABLED=1:允许tcp远程连接 /IACCEPTSQLSERVERLICENSETERMS:同意安装前须知 /SECURITYMODE=SQL:安全认证模式为'sql用户认证' /SAPWD=xxxxxx:sa用户密码为'xxxxxx'
-&$Destination /q /ACTION=Install /FEATURES=SQLEngine /INSTANCENAME=MSSQLSERVER /TCPENABLED=1 /IACCEPTSQLSERVERLICENSETERMS  /SECURITYMODE=SQL /SAPWD=**{xxxxxx}**
+$sqlpwd = "P@ssw0rd"
+choco install sql-server-2019 --params="'/TCPENABLED=`"1`" /SECURITYMODE=`"SQL`" /SAPWD:`"$sqlpwd`"'"*
 ```
 
 ## 安装linux子系统
