@@ -120,9 +120,11 @@ choco install dotnetcore-sdk
 choco install shadowsocksr-windows
 $ssrConfig > ~/AppData\Local\shadowsocksr-windows\ShadowsocksR\gui-config.json
 ~/AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
+# 让子弹飞一会儿, 避免ssr启动时的网络错误
+Start-Sleep 3
 # choco安装nssm
 choco install nssm
-nssm install ~\AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
+nssm install ShadowsocksR ~\AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
 # choco安装.net core运行时
 choco install dotnetcore-windowshosting
 # choco安装webdeploy
