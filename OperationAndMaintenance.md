@@ -26,6 +26,64 @@ mkdir "`$env:UserProfile\bin" -ErrorAction SilentlyContinue
 `$bin = "`$env:UserProfile\bin"
 "@>$PROFILE
 
+$ssServerIp="127.0.0.1"
+$ssServerPwd = "Ssp@ssw0rdsS"
+
+$ssrConfig = @"
+{
+  "Configs": [
+    {
+      "Id": "08f4287f07ea45ffb28ff677be966f6c",
+      "server": "$ssServerIp",
+      "Server_Port": 2333,
+      "Server_Udp_Port": 0,
+      "Password": "$ssServerPwd",
+      "Method": "aes-256-cfb",
+      "Protocol": "auth_chain_a",
+      "ProtocolParam": "",
+      "obfs": "tls1.2_ticket_fastauth",
+      "ObfsParam": "",
+      "Remarks_Base64": "",
+      "Group": "Default Group",
+      "SubTag": "",
+      "Enable": true,
+      "UdpOverTcp": false
+    }
+  ],
+  "Index": 0,
+  "Random": false,
+  "SysProxyMode": 3,
+  "ShareOverLan": true,
+  "LocalPort": 1080,
+  "ReconnectTimes": 2,
+  "BalanceType": 4,
+  "RandomInGroup": true,
+  "Ttl": 60,
+  "ConnectTimeout": 5,
+  "ProxyRuleMode": 2,
+  "ProxyEnable": false,
+  "PacDirectGoProxy": false,
+  "ProxyType": 1,
+  "ProxyHost": "",
+  "ProxyPort": 1,
+  "ProxyAuthUser": "",
+  "ProxyAuthPass": "",
+  "ProxyUserAgent": "",
+  "AuthUser": "",
+  "AuthPass": "",
+  "AutoBan": false,
+  "CheckSwitchAutoCloseAll": true,
+  "LogEnable": true,
+  "SameHostForSameTarget": true,
+  "IsPreRelease": false,
+  "AutoCheckUpdate": true,
+  "LangName": "zh-CN",
+  "DnsClients": [],
+  "ServerSubscribes": [],
+  "PortMap": {}
+}
+"@
+
 # 安装iis
 Add-WindowsFeature web-server
 # 安装iis承载核心
@@ -56,18 +114,31 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 choco feature enable -n allowGlobalConfirmation
 # 安装git, 很多东西托管在github上, 需要git安装
 choco install git
+# choco安装dotnetcore-sdk
+choco install dotnetcore-sdk
+# choco安装shadowsocksr以备不时之需
+choco install shadowsocksr-windows
+$ssrConfig > ~/AppData\Local\shadowsocksr-windows\ShadowsocksR\gui-config.json
+~/AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
+# choco安装nssm
+choco install nssm
+nssm install ~\AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
 # choco安装.net core运行时
 choco install dotnetcore-windowshosting
 # choco安装webdeploy
 choco install webdeploy
-# choco安装shadowsocks以备不时之需
-choco install shadowsocks
+# choco安装googlechrome
+choco install googlechrome
 # choco安装listary,搜文件还是很有用的
 choco install listary
 # choco安装vscode,notepad的编码问题可以搞死你
 choco install visualstudiocode
 # choco安装dependencywalker,服务器出现兼容性问题的时候可以用来检查dll
 choco install dependencywalker
+# choco安装nginx
+choco install nginx
+$sqlpwd="P@ssw0rd"
+choco install sql-server-2019 --params="'/TCPENABLED=`"1`" /SECURITYMODE=`"SQL`" /SAPWD:`"$sqlpwd`"'"
 # 重启服务器,血泪教训
 Restart-Computer
 # over
