@@ -103,7 +103,7 @@ y
 # 配置允许所有host访问(可能有安全隐患,建议统一配置到跳板机上)
 winrm s winrm/config/client '@{TrustedHosts="*"}'
 # 配置winrm端口为5985
-Set-Item WSMan:\localhost\listener\*\Port 5985
+Set-Item WSMan:\localhost\listener\*\Port 5985 -force
 # 导入iis相关命令及iis虚拟驱动器
 Import-Module WebAdministration
 # 我想大家应该不需要Default Web Site
