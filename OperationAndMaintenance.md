@@ -3,12 +3,13 @@
 ### 虚拟机初始化脚本
 
 ```powershell
-Set-ExecutionPolicy Bypass -Scope CurrentUser -Force;
-# 载入自定义profile
-# 创建profile目录
-mkdir $PROFILE
-del $PROFILE
-@"
+try {
+    Set-ExecutionPolicy Bypass -Scope CurrentUser -Force;
+    # 载入自定义profile
+    # 创建profile目录
+    mkdir $PROFILE
+    del $PROFILE
+    @"
 ###########################################################
 #
 # custom profile
@@ -26,10 +27,10 @@ mkdir "`$env:UserProfile\bin" -ErrorAction SilentlyContinue
 `$bin = "`$env:UserProfile\bin"
 "@>$PROFILE
 
-$ssServerIp="127.0.0.1"
-$ssServerPwd = "Ssp@ssw0rdsS"
+    $ssServerIp = "127.0.0.1"
+    $ssServerPwd = "Ssp@ssw0rdsS"
 
-$ssrConfig = @"
+    $ssrConfig = @"
 {
   "Configs": [
     {
@@ -84,66 +85,70 @@ $ssrConfig = @"
 }
 "@
 
-# 安装iis
-Add-WindowsFeature web-server
-# 安装iis承载核心
-Install-WindowsFeature web-whc,web-common-http,web-mgmt-console,Web-Asp-Net45,Web-websockets
-# 安装iis的web sokcet支持
-Install-WindowsFeature Web-websockets
-# 安装web管理服务,配置允许远程访问并自动启动服务
-Add-WindowsFeature Web-Mgmt-Service
-Set-Service wmsvc -startuptype "auto"
-Set-ItemProperty -Path  HKLM:\SOFTWARE\Microsoft\WebManagement\Server -Name EnableRemoteManagement  -Value 1
-Start-Service wmsvc
-# 允许远程执行shell脚本
-Enable-PSRemoting -force
-# 配置远程管理
-winrm quickconfig
-y
-# 配置允许所有host访问(可能有安全隐患,建议统一配置到跳板机上)
-winrm s winrm/config/client '@{TrustedHosts="*"}'
-# 配置winrm端口为5985
-Set-Item WSMan:\localhost\listener\*\Port 5985 -force
-# 导入iis相关命令及iis虚拟驱动器
-Import-Module WebAdministration
-# 我想大家应该不需要Default Web Site
-Remove-Website -Name "Default Web Site"
-# 允许网络访问并安装choco
-iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-# choco静默安装
-choco feature enable -n allowGlobalConfirmation
-# 安装git, 很多东西托管在github上, 需要git安装
-choco install git
-# choco安装dotnetcore-sdk
-choco install dotnetcore-sdk
-# choco安装shadowsocksr以备不时之需
-choco install shadowsocksr-windows
-$ssrConfig > ~/AppData\Local\shadowsocksr-windows\ShadowsocksR\gui-config.json
-~/AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
-# 让子弹飞一会儿, 避免ssr启动时的网络错误
-Start-Sleep 3
-# choco安装nssm
-choco install nssm
-nssm install ShadowsocksR ~\AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
-# choco安装.net core运行时
-choco install dotnetcore-windowshosting
-# choco安装webdeploy
-choco install webdeploy
-# choco安装googlechrome
-choco install googlechrome
-# choco安装listary,搜文件还是很有用的
-choco install listary
-# choco安装vscode,notepad的编码问题可以搞死你
-choco install visualstudiocode
-# choco安装dependencywalker,服务器出现兼容性问题的时候可以用来检查dll
-choco install dependencywalker
-# choco安装nginx
-choco install nginx
-$sqlpwd="P@ssw0rd"
-choco install sql-server-2019 --params="'/TCPENABLED=`"1`" /SECURITYMODE=`"SQL`" /SAPWD:`"$sqlpwd`"'"
-# 重启服务器,血泪教训
-Restart-Computer
-# over
+    # 安装iis
+    Add-WindowsFeature web-server
+    # 安装iis承载核心
+    Install-WindowsFeature web-whc, web-common-http, web-mgmt-console, Web-Asp-Net45, Web-websockets
+    # 安装iis的web sokcet支持
+    Install-WindowsFeature Web-websockets
+    # 安装web管理服务,配置允许远程访问并自动启动服务
+    Add-WindowsFeature Web-Mgmt-Service
+    Set-Service wmsvc -startuptype "auto"
+    Set-ItemProperty -Path  HKLM:\SOFTWARE\Microsoft\WebManagement\Server -Name EnableRemoteManagement  -Value 1
+    Start-Service wmsvc
+    # 允许远程执行shell脚本
+    Enable-PSRemoting -force
+    # 配置远程管理
+    winrm quickconfig
+    y
+    # 配置允许所有host访问(可能有安全隐患,建议统一配置到跳板机上)
+    winrm s winrm/config/client '@{TrustedHosts="*"}'
+    # 配置winrm端口为5985
+    Set-Item WSMan:\localhost\listener\*\Port 5985 -force
+    # 导入iis相关命令及iis虚拟驱动器
+    Import-Module WebAdministration
+    # 我想大家应该不需要Default Web Site
+    Remove-Website -Name "Default Web Site"
+    # 允许网络访问并安装choco
+    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    # choco静默安装
+    choco feature enable -n allowGlobalConfirmation
+    # 安装git, 很多东西托管在github上, 需要git安装
+    choco install git
+    # choco安装dotnetcore-sdk
+    choco install dotnetcore-sdk
+    # choco安装shadowsocksr以备不时之需
+    choco install shadowsocksr-windows
+    $ssrConfig > ~/AppData\Local\shadowsocksr-windows\ShadowsocksR\gui-config.json
+    ~/AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
+    # 让子弹飞一会儿, 避免ssr启动时的网络错误
+    Start-Sleep 3
+    # choco安装nssm
+    choco install nssm
+    nssm install ShadowsocksR ~\AppData\Local\shadowsocksr-windows\ShadowsocksR\ShadowsocksR.exe
+    # choco安装.net core运行时
+    choco install dotnetcore-windowshosting
+    # choco安装webdeploy
+    choco install webdeploy
+    # choco安装googlechrome
+    choco install googlechrome
+    # choco安装listary,搜文件还是很有用的
+    choco install listary
+    # choco安装vscode,notepad的编码问题可以搞死你
+    choco install visualstudiocode
+    # choco安装dependencywalker,服务器出现兼容性问题的时候可以用来检查dll
+    choco install dependencywalker
+    # choco安装nginx
+    choco install nginx
+    $sqlpwd = "P@ssw0rd"
+    choco install sql-server-2019 --params="'/TCPENABLED=`"1`" /SECURITYMODE=`"SQL`" /SAPWD:`"$sqlpwd`"'"
+    # 重启服务器,血泪教训
+    Restart-Computer
+    # over
+}
+catch  [System.SystemException] { 
+    $_>PowerAdmin.log
+}
 ```
 
 ### 短期运维脚本
