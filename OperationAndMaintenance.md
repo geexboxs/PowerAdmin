@@ -246,6 +246,7 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name
 powershell "Install-Module PowershellGet -Force"
 Install-Module DockerMsftProvider -Force
 Install-Package Docker -ProviderName DockerMsftProvider –Force
+Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile $Env:ProgramFiles\Docker\docker-compose.exe
 Restart-Computer
 ```
 
