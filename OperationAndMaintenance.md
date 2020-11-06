@@ -238,12 +238,68 @@ nohup python ~/hello.py &
 
 ```
 
+## 安装docker
+```powershell
+# 安装PowershellGet
+Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
+Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
+powershell "Install-Module PowershellGet -Force"
+Install-Module DockerMsftProvider -Force
+Install-Package Docker -ProviderName DockerMsftProvider –Force
+Restart-Computer
+```
+
 ## 安装sql developer
 
 **收费版本sqlserver安装时需要额外键入license信息,这里不涉及,不处理**
 ```powershell
 $sqlpwd = "P@ssw0rd"
 choco install sql-server-2019 --params="'/TCPENABLED=`"1`" /SECURITYMODE=`"SQL`" /SAPWD:`"$sqlpwd`"'"*
+```
+
+## 安装Nginx Proxy Manager
+```powershell
+choco install sqlite
+    choco install docker-compose
+    $nginxProxyManagerConfig=@"
+{
+    "database": {
+        "engine": "knex-native",
+        "knex": {
+            "client": "sqlite3",
+            "connection": {
+                "filename": "/data/database.sqlite"
+            }
+        }
+    }
+}
+"@
+mkdir ~/.nginxProxyManager
+$nginxProxyManagerConfig>~/.nginxProxyManager/config.json
+$nginxProxyDockerCompose=@"
+version: ""
+services:
+  app:
+    image: jc21/nginx-proxy-manager:2
+    restart: always
+    ports:
+      # Public HTTP Port:
+      - '80:80'
+      # Public HTTPS Port:
+      - '443:443'
+      # Admin Web Port:
+      - '81:81'
+    # environment:
+      # Uncomment this if IPv6 is not enabled on your host
+      # DISABLE_IPV6: 'true'
+    volumes:
+      # Make sure this config.json file exists as per instructions above:
+      - ~/.nginxProxyManager/config.json:/app/config/production.json
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+"@
+$nginxProxyDockerCompose>./docker-compose.yml
+docker-compose up -d
 ```
 
 ## 安装linux子系统
