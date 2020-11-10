@@ -67,7 +67,7 @@ function Write-Theme {
     `$timeStamp = Get-Date -UFormat %r
     `$timestamp = "[`$timeStamp]"
 
-    `$prompt += Set-CursorForRightBlockWrite -textLength (`$timestamp.Length + 1)
+    `$prompt += Set-CursorForRightBlockWrite -textLength (`$timestamp.Length + 4)
     `$prompt += Write-Prompt `$timeStamp -ForegroundColor `$sl.Colors.PromptForegroundColor
 
     `$prompt += Set-Newline

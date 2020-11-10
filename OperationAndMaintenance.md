@@ -244,8 +244,11 @@ nohup python ~/hello.py &
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
 powershell "Install-Module PowershellGet -Force"
-Install-Module DockerMsftProvider -Force
-Install-Package Docker -ProviderName DockerMsftProvider –Force
+# Install-Module DockerMsftProvider -Force
+# Install-Package Docker -ProviderName DockerMsftProvider –Force
+# 预览版才可使用linux container
+Install-Module DockerProvider -Force
+Install-Package Docker -ProviderName DockerProvider -RequiredVersion preview
 Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile $Env:ProgramFiles\Docker\docker-compose.exe
 Restart-Computer
 ```
@@ -260,9 +263,13 @@ choco install sql-server-2019 --params="'/TCPENABLED=`"1`" /SECURITYMODE=`"SQL`"
 
 ## 安装Nginx Proxy Manager
 ```powershell
+stop-service docker
+Get-ContainerNetwork | Remove-ContainerNetwork -Force -ea SilentlyContinue
+# 切换使用linux container
+[Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
+start-service docker
 choco install sqlite
-    choco install docker-compose
-    $nginxProxyManagerConfig=@"
+$nginxProxyManagerConfig=@"
 {
     "database": {
         "engine": "knex-native",
@@ -278,7 +285,11 @@ choco install sqlite
 mkdir ~/.nginxProxyManager
 $nginxProxyManagerConfig>~/.nginxProxyManager/config.json
 $nginxProxyDockerCompose=@"
-version: ""
+version: "3"
+networks:
+  default:
+    external:
+      name: nat 
 services:
   app:
     image: jc21/nginx-proxy-manager:2
