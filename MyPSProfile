@@ -5,7 +5,8 @@ function rmrf($item) { Remove-Item $item -Recurse -Force }
 function mkfile($file) { "" | Out-File $file -Encoding ASCII }
 function jsonize($obj){ [Newtonsoft.Json.JsonConvert]::SerializeObject($obj) }
 function link ($source,$target) {
-    cmd /c mklink /d Resolve-Path($target) Resolve-Path($source)
+    $source = Resolve-Path($source);
+    cmd /c mklink /d $target $source
 }
 Import-Module posh-git
 Import-Module oh-my-posh
