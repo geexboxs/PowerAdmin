@@ -1,7 +1,4 @@
 Set-PSReadlineOption -EditMode Emacs
-$bin = ([System.String]::Concat($env:USERPROFILE,"\bin"))
-$binsub = Get-ChildItem $bin | ? { $_.Mode -match "d-----" } | % { $_.FullName}
-$env:path = [System.String]::Join(';', $env:Path, $env:USERPROFILE, $bin, [System.String]::Join(';',$binsub))
 $env:LC_ALL="C.UTF-8"
 function which($name) { Get-Command $name | Select-Object Definition }
 function rmrf($item) { Remove-Item $item -Recurse -Force }
