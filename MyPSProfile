@@ -1,4 +1,3 @@
-chcp 65001
 Set-PSReadlineOption -EditMode Emacs
 $bin = ([System.String]::Concat($env:USERPROFILE,"\bin"))
 $binsub = Get-ChildItem $bin | ? { $_.Mode -match "d-----" } | % { $_.FullName}
@@ -9,7 +8,7 @@ function rmrf($item) { Remove-Item $item -Recurse -Force }
 function mkfile($file) { "" | Out-File $file -Encoding ASCII }
 function jsonize($obj){ [Newtonsoft.Json.JsonConvert]::SerializeObject($obj) }
 function link ($source,$target) {
-    cmd /c mklink /d $target $source
+    cmd /c mklink /d Resolve-Path($target) Resolve-Path($source)
 }
 Import-Module posh-git
 Import-Module oh-my-posh
