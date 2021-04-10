@@ -40,6 +40,6 @@ services:
       SERVER_NAME: ims-kibana
     networks:
       - elastic
-">docker-compse.yml
-docker-compse up
-rm .\docker-compse.yml
+">docker-compose.yml
+docker-compose up
+rm .\docker-compose.yml
