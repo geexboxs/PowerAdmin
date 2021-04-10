@@ -3,7 +3,7 @@ docker container run --name host -v /:/host alpine
 # 增加max_map_count配置以安装es7
 docker exec host bash -c "chroot /host;sysctl -w vm.max_map_count=262144;"
 # 兼容wsl docker版本
-wsl sysctl -w vm.max_map_count=262144
+wsl sudo sysctl -w vm.max_map_count=262144
 "version: `"2`"
 networks:
   elastic:
