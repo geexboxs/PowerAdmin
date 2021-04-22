@@ -105,7 +105,7 @@ Import-Module Get-ChildItemColor
 Import-Module WindowsConsoleFonts
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
-Set-Theme Paradox
+Set-PoshPrompt -Theme Paradox
 "@ > $PROFILE
 chcp 65001
 Set-PSReadlineOption -EditMode Emacs
@@ -115,13 +115,17 @@ Import-Module Get-ChildItemColor
 Import-Module WindowsConsoleFonts
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
-Set-Theme Paradox
+Set-PoshPrompt -Theme Paradox
 git clone https://github.com/powerline/fonts.git
 cd .\fonts\
 .\install.ps1
 cd ..
 del .\fonts\ -Recurse -Force
 
+# NOTE:Running chcp 65001 from inside a PowerShell session 对编码没效果
+# 还需要手动启动 Beta: Use unicode UTF-8 for worldwide language support
+# 参考: https://stackoverflow.com/questions/57131654/using-utf-8-encoding-chcp-65001-in-command-prompt-windows-powershell-window
+"$OutputEncoding = [System.Text.UTF8Encoding]::new()" | Out-File -Append $PROFILE
 ```
 
 如果使用wsl的话(todo)
